@@ -12,6 +12,11 @@ code {
     monospace;
 }
 
+*{
+  box-sizing: border-box;
+}
+
 body{
   background-color: hsl(0, 0%, 0%);
+  min-width: 1200px;
 }
