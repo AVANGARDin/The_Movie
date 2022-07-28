@@ -13,6 +13,5 @@ export function checkData(data) {
     if (checkData) return;
     result.push(item);
   });
-  console.log("результати",result)
   return result;
 }
