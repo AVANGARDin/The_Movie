@@ -25,7 +25,8 @@ main img{
 
 .random_movie{
   display: flex;
-  margin-bottom: 100px;
+  height: 330px;
+  margin-bottom: 10px;
 }
 .image__overlay_about-film{
   width: 50%;
@@ -40,6 +41,11 @@ main img{
 
 .about-film__overview{
   font-size: 20px;
+  height: 70%;
+  overflow: auto;
+}
+.about-film__overview::-webkit-scrollbar{
+  width: 0px;
 }
 
 .play-button{
