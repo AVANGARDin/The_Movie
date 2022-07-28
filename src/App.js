@@ -1,11 +1,7 @@
+import MainPage from "./components/MainPage/MainPage";
+
 function App() {
-  return (
-      <header className="App-header">
-
-           The Movie
-
-      </header>
-  );
+  return <MainPage />;
 }
 
 export default App;
