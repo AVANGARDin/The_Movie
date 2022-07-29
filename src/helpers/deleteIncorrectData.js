@@ -1,4 +1,4 @@
-export function checkData(data) {
+export function deleteIncorrectData (data) {
   const result = [];
   data.forEach((item) => {
     const keys = Object.keys(item);
