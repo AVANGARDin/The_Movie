@@ -6,18 +6,20 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "./PopularMovies.css"
 import { LOW_SIZE_IMG_URL } from '../../../constants/endpoints';
-
-const user = "Dima";
-const handleClick = (e) => {
-  axios.post("http://localhost:3050/", { user, videoId: e.currentTarget.dataset.id }).then((response) => {
-    console.log(response);
-  }).catch(response=>console.log(response.status))
-  // console.log("CLidICCCK", e.currentTarget.dataset.id)
-}
+import MoviePage from '../../MoviePage/MoviePage';
 
 export default function PopularMovies({ movies, buttonName }) {
+const [isMovie,setIsMovie]=useState(false)
+  const [movie, setMovie] = useState(null);
+  const handleClick = (e) => {
+    const movie = movies.find(item => item.id === +e.currentTarget.dataset.id);
+    setMovie (movie);
+    setIsMovie(true);
+  };
+
   return (
     <div className="popular-movie">
+      {isMovie ? <MoviePage movie={movie} /> : null}
       <button className="name-category">
         {buttonName}
       </button>
