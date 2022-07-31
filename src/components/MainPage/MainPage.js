@@ -16,6 +16,7 @@ export default function MainPage() {
   const [popularMovies, setPopularMovies] = useState([]);
   const [isPopularMovies, setIsPopularMovies] = useState(false);
   const [popularTVSeries, setPopularTVSeries] = useState([]);
+  const [myList, setMyList] = useState([]);
   const [movieGenres, setMovieGenres] = useState([]);
 
   useEffect(() => {
@@ -55,9 +56,13 @@ export default function MainPage() {
   return (
     <main>
       <div className="image__container">
-        {isPopularMovies
-          ? <img src={ORIGINAL_IMG_URL + popularMovies[random].backdrop_path}></img>
-          : <div>Loading img</div>}
+        {isPopularMovies ? (
+          <img
+            src={ORIGINAL_IMG_URL + popularMovies[random].backdrop_path}
+          ></img>
+        ) : (
+          <div>Loading img</div>
+        )}
         <div className="image__overlay"></div>
       </div>
       <div className="movies__container">
@@ -112,6 +117,9 @@ export default function MainPage() {
           movies={popularTVSeries}
           buttonName="Popular TV Series"
         />
+        {myList.length ? (
+          <PopularMovies movies={myList} buttonName="My List" />
+        ) : null}
       </div>
     </main>
   );
