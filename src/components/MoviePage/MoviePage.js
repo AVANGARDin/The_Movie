@@ -1,23 +1,27 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { LOW_SIZE_IMG_URL } from '../../constants/endpoints';
 import { genres } from '../../constants/genres';
 import "./MoviePage.css"
 import ReactPlayer from "react-player";
 import Rating from "@mui/material/Rating";
+import { useLocation, useParams } from 'react-router-dom';
+
 const API_KEY = process.env.REACT_APP_API_KEY;
 
-export default function MoviePage({movie}) {
+export default function MoviePage() {
+  const location = useLocation();
+  const { id, moviType } = location.state;
+  const [movieInfo, setMovieInfo] = useState();
+  const [video, setVideo] = useState();
 
-  const [video, setVideo] = useState(null);
-
-  useState(() => {
+  useEffect(() => {
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=${API_KEY}`
+        `https://api.themoviedb.org/3/${moviType}/${id}/videos?api_key=${API_KEY}`
       )
       .then((response) => {
-        if(response.data.results.length < 1) return;
+        if (response.data.results.length < 1) return;
         const oficial_trailer = response.data.results.find(
           (item) => item.name === "Official Trailer"
         );
@@ -25,47 +29,58 @@ export default function MoviePage({movie}) {
           ? setVideo(`https://www.youtube.com/watch?v=` + oficial_trailer.key)
           : setVideo(
               `https://www.youtube.com/watch?v=` + response.data.results[0].key
-          );
+            );
       });
-  },[])
+  }, [])
+  
+    useEffect(() => {
+      axios
+        .get(
+          `https://api.themoviedb.org/3/${moviType}/${id}?api_key=${API_KEY}`
+        )
+        .then((response) => {
+          console.log("about movie",response.data)
+          setMovieInfo(response.data);
+        });
+    }, []);
 
-  console.log(movie)
-
-
-
-  return (
-    <div className="video-player__container">
-      <div className="video-player__description">
-        <img
-          className="video-player__poster"
-          src={LOW_SIZE_IMG_URL + movie.poster_path}
-        ></img>
-        <div className="video-player__description_info">
-          <div className="title">{movie.title || movie.name}</div>
-          <div className="genres">
-            <ul>
-              {movie.genre_ids.map((id) => {
-                return <li>{genres.find((item) => item.id === id).name}</li>;
-              })}
-            </ul>
-          </div>
-          <div className="overview">{movie.overview}</div>
-          <div className="release_date">
-            {movie.release_date
-              ? `Release date: ${movie.release_date}`
-              : `Release date: ${movie.first_air_date}`}
-          </div>
-          <div className="rate">
-            <Rating
-              readOnly
-              precision={0.5}
-              defaultValue={movie.vote_average}
-              max={10}
-            />
-          </div>
+https: return movieInfo ? (
+  <div className="video-player__container">
+    <div className="video-player__description">
+      <img
+        className="video-player__poster"
+        src={LOW_SIZE_IMG_URL + movieInfo.poster_path}
+      ></img>
+      <div className="video-player__description_info">
+        <div className="title">{movieInfo.title || movieInfo.name}</div>
+        <div className="genres">
+          <ul>
+            {movieInfo.genres.map((genre) => {
+              return (
+                <li>{genres.find((item) => item.id === genre.id).name}</li>
+              );
+            })}
+          </ul>
+        </div>
+        <div className="overview">{movieInfo.overview}</div>
+        <div className="release_date">
+          {movieInfo.release_date
+            ? `Release date: ${movieInfo.release_date}`
+            : `Release date: ${movieInfo.first_air_date}`}
+        </div>
+        <div className="rate">
+          <Rating
+            readOnly
+            precision={0.5}
+            defaultValue={movieInfo.vote_average}
+            max={10}
+          />
         </div>
       </div>
-      <ReactPlayer width={"auto"} height={"500px"} controls url={video} />
     </div>
-  );
+    <ReactPlayer width={"auto"} height={"500px"} controls url={video} />
+  </div>
+) : (
+  <div>Loading</div>
+);
 }
