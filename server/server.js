@@ -5,7 +5,8 @@ const cors = require("cors");
 const port = process.env.PORT || 3050;
 
 
-const checkUsers = new Set();
+const checkEmail = new Set();
+const users = {};
 
 const favorite = {
   Roman: []
@@ -36,12 +37,29 @@ app.post("/", (req, res) => {
   //   res.status(200).send();
   //   console.log(favorite);
   // }
-  favorite[req.body.user]
-    ? favorite[req.body.user].push(req.body.videoId)
-    : favorite[req.body.user] = [];
-  favorite[req.body.user].push(req.body.videoId);
-      // res.status(200).send();
-      console.log(favorite);
+  // favorite[req.body.user]
+  //   ? favorite[req.body.user].push(req.body.videoId)
+  //   : favorite[req.body.user] = [];
+  // favorite[req.body.user].push(req.body.videoId);
+  //     // res.status(200).send();
+  //     console.log(favorite);
+  console.log(req.body)
+});
+
+app.post("/signup", (req, res) => {
+  if (checkEmail.has(req.body.email)) {
+    res.send({status:"not", data: 'Email address is already taken'})
+  } else {
+    users[req.body.email] = {
+      name: req.body.userName,
+      favorite: []
+    };
+    res.send({ status: "yes", data: req.body.userName });
+  }
+});
+
+app.post("/login", (req, res) => {
+  console.log(req.body);
 });
 
 // app.get("/editbank/:id", (req, res) => {

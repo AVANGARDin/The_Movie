@@ -51,6 +51,7 @@ export default function MainPage() {
     e.target.currentTime = 0;
   };
 
+
   let random = Math.floor(Math.random() * popularMovies.length);
 
   return (

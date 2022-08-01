@@ -1,28 +1,27 @@
-import React, { useState } from 'react';
-import axios from "axios";
+import React from 'react';
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import "./PopularMovies.css"
 import { LOW_SIZE_IMG_URL } from '../../../constants/endpoints';
-import MoviePage from '../../MoviePage/MoviePage';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function PopularMovies({ movies, buttonName }) {
-const [isMovie,setIsMovie]=useState(false)
-  const [movie, setMovie] = useState(null);
+  const navigate = useNavigate();
   const handleClick = (e) => {
     const movie = movies.find(item => item.id === +e.currentTarget.dataset.id);
-    setMovie (movie);
-    setIsMovie(true);
+    console.log("click", "click", movie);
+    navigate(`movie/${e.currentTarget.dataset.name}`,
+      { state: { id: e.currentTarget.dataset.id, moviType: e.currentTarget.dataset.type } });
   };
+
+
 
   return (
     <div className="popular-movie">
-      {isMovie ? <MoviePage movie={movie} /> : null}
-      <button className="name-category">
-        {buttonName}
-      </button>
+      <button className="name-category">{buttonName}</button>
       <Swiper
         modules={[Navigation]}
         navigation
@@ -34,6 +33,8 @@ const [isMovie,setIsMovie]=useState(false)
             <SwiperSlide>
               <div
                 data-id={item.id}
+                data-type={item.title ? "movie" : "tv"}
+                data-name={item.title ? item.title.replace(/\s/g, "") : item.name.replace(" ","")}
                 className="popular-movie__slide"
                 onClick={handleClick}
               >
