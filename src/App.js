@@ -7,22 +7,19 @@ import GenresPage from "./components/shared/GenresPage/GenresPage";
 
 function App() {
   return (
-    // <Routes>
-    //   <Route path="/" element={<Header />}>
-    //     <Route index element={<MainPage />} />
-    //     <Route path="movie/:name" element={<MoviePage />} />
-    //     {/* <Route path="tv/:name" element={<MoviePage />} /> */}
-    //   </Route>
-    // </Routes>
-
-        <Routes>
+    <Routes>
       <Route path="/" element={<Header />}>
-        <Route index element={<GenresPage />} />
-        {/* <Route path="movie/:name" element={<MoviePage />} /> */}
-        {/* <Route path="tv/:name" element={<MoviePage />} /> */}
+        <Route index element={<MainPage />} />
+        <Route
+          path="movie/genres"
+          element={<GenresPage moviType="movie" />}
+        />
+        <Route
+          path="tv/genres"
+          element={<GenresPage moviType="tv" />} />
+        <Route path="movie/:name" element={<MoviePage />} />
       </Route>
     </Routes>
-
   );
 }
 
