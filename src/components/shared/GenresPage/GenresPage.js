@@ -20,12 +20,14 @@ export default function GenresPage({ moviType = "movie" }) {
   const [videoGenres, setVideoGenres] = useState();
 
   useEffect(() => {
-      (async () => {
-        const genres = await getGenres(endpoints[moviType === "tv" ? "tvSeriesGenres" : "movieGenres"]);
-        console.log(genres)
-        setVideoGenres(genres);
-      })();
-  }, []);
+    (async () => {
+      const genres = await getGenres(
+        endpoints[moviType === "tv" ? "tvSeriesGenres" : "movieGenres"]
+      );
+      console.log(genres);
+      setVideoGenres(genres);
+    })();
+  }, [moviType]);
   
   return (
     <div className="genres-container">
