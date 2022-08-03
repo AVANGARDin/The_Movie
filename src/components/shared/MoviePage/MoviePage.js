@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { LOW_SIZE_IMG_URL } from '../../constants/endpoints';
-import { genres } from '../../constants/genres';
+import { LOW_SIZE_IMG_URL } from "../../../constants/endpoints";
+import { genres } from '../../../constants/genres';
 import "./MoviePage.css"
 import ReactPlayer from "react-player";
 import Rating from "@mui/material/Rating";
