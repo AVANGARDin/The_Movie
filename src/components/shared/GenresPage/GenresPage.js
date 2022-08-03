@@ -3,6 +3,7 @@ import "./GenresPage.css"
 import { genres } from '../../../constants/genres';
 import { endpoints } from '../../../constants/endpoints';
 import { getGenres } from '../../../helpers/apiHelpers/getGenres';
+import { Link } from 'react-router-dom';
 
   const mouseOverHandler = (e) => {
     e.target.closest(".category__player").childNodes[0].play();
@@ -16,18 +17,18 @@ import { getGenres } from '../../../helpers/apiHelpers/getGenres';
     e.target.currentTime = 0;
   };
 
-export default function GenresPage({ moviType = "movie" }) {
+export default function GenresPage({ movieType = "movie" }) {
   const [videoGenres, setVideoGenres] = useState();
 
   useEffect(() => {
     (async () => {
       const genres = await getGenres(
-        endpoints[moviType === "tv" ? "tvSeriesGenres" : "movieGenres"]
+        endpoints[movieType === "tv" ? "tvSeriesGenres" : "movieGenres"]
       );
       console.log(genres);
       setVideoGenres(genres);
     })();
-  }, [moviType]);
+  }, [movieType]);
   
   return (
     <div className="genres-container">
@@ -37,7 +38,7 @@ export default function GenresPage({ moviType = "movie" }) {
               if (!videoGenres.some((category) => category.id === item.id))
                 return;
               return (
-
+                <Link to={`/${movieType}/${item.name}/${item.id}`}>
                   <div className="category__player">
                     <video
                       loop
@@ -54,7 +55,7 @@ export default function GenresPage({ moviType = "movie" }) {
                       {item.name}
                     </div>
                   </div>
-
+                </Link>
               );
             })
           : null}
