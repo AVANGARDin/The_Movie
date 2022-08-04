@@ -6,8 +6,9 @@ export default function NotFoundPage() {
   return (
     <Box p={12} color={'white'}>
       <Box>Sorry, we couldn't find that page</Box>
+      go to 
       <Link to="/">
-        <Button>Main Page</Button>
+        <Button color="error">Main Page</Button>
       </Link>
     </Box>
   );

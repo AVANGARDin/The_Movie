@@ -8,9 +8,8 @@ import { genres } from '../../constants/genres';
 import { endpoints, ORIGINAL_IMG_URL } from "../../constants/endpoints";
 import { getPopular } from '../../helpers/apiHelpers/getPopular';
 import { getGenres } from "../../helpers/apiHelpers/getGenres";
-import PopularMovies from "../shared/PopularMovies/PopularMovies";
+import PopularMovies from "../../components/shared/PopularMovies/PopularMovies";
 import PlayButton from './PlayButton';
-
 
 export default function MainPage() {
   const [popularMovies, setPopularMovies] = useState([]);
