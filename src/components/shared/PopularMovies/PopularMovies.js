@@ -10,14 +10,6 @@ import { useNavigate } from 'react-router-dom';
 
 export default function PopularMovies({ movies, buttonName }) {
   const navigate = useNavigate();
-  const handleClick = (e) => {
-    const movie = movies.find(item => item.id === +e.currentTarget.dataset.id);
-    console.log("click", "click", movie);
-    navigate(`movie/${e.currentTarget.dataset.name}`,
-      { state: { id: e.currentTarget.dataset.id, moviType: e.currentTarget.dataset.type } });
-  };
-
-
 
   return (
     <div className="popular-movie">
@@ -32,11 +24,14 @@ export default function PopularMovies({ movies, buttonName }) {
           return (
             <SwiperSlide>
               <div
-                data-id={item.id}
-                data-type={item.title ? "movie" : "tv"}
-                data-name={item.title ? item.title.replace(/\s/g, "") : item.name.replace(" ","")}
                 className="popular-movie__slide"
-                onClick={handleClick}
+                onClick={() => {
+                  navigate(
+                    item.title
+                      ? `movie/${item.id}/${item.title.replace(/\s/g, "_")}`
+                      : `tv/${item.id}/${item.name.replace(/\s/g, "_")}`
+                  );
+                }}
               >
                 <img src={LOW_SIZE_IMG_URL + item.poster_path}></img>
               </div>

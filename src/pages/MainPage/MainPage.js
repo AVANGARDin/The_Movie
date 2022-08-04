@@ -10,6 +10,7 @@ import { getPopular } from '../../helpers/apiHelpers/getPopular';
 import { getGenres } from "../../helpers/apiHelpers/getGenres";
 import PopularMovies from "../../components/shared/PopularMovies/PopularMovies";
 import PlayButton from './PlayButton';
+import GenreItem from '../../components/shared/GenreItem/GenreItem';
 
 export default function MainPage() {
   const [popularMovies, setPopularMovies] = useState([]);
@@ -33,23 +34,6 @@ export default function MainPage() {
       setMovieGenres(genres);
     })();
   }, []);
-
-  const mouseOverHandler = (e) => {
-    e.target
-      .closest(".category__player")
-      .childNodes[0].play();
-  }
-
-  const mouseOutHandler = (e) => {
-    e.target
-      .closest(".category__player")
-      .childNodes[0].pause();
-  };
-
-  const playerPauseHandler = (e) => {
-    e.target.currentTime = 0;
-  };
-
 
   let random = Math.floor(Math.random() * popularMovies.length);
 
@@ -92,22 +76,7 @@ export default function MainPage() {
               return;
             return (
               <SwiperSlide>
-                <div className="category__player">
-                  <video
-                    loop
-                    muted
-                    src={item.src}
-                    type="video/mp4"
-                    onPause={playerPauseHandler}
-                  ></video>
-                  <div
-                    className="category"
-                    onMouseOver={mouseOverHandler}
-                    onMouseOut={mouseOutHandler}
-                  >
-                    {item.name}
-                  </div>
-                </div>
+                <GenreItem item={ item }/>
               </SwiperSlide>
             );
           })}

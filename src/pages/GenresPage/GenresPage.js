@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import "./GenresPage.css"
-import { genres } from '../../../constants/genres';
-import { endpoints } from '../../../constants/endpoints';
-import { getGenres } from '../../../helpers/apiHelpers/getGenres';
+import { genres } from '../../constants/genres';
+import { endpoints } from '../../constants/endpoints';
+import { getGenres } from '../../helpers/apiHelpers/getGenres';
 import { Link } from 'react-router-dom';
 
   const mouseOverHandler = (e) => {
@@ -25,7 +25,6 @@ export default function GenresPage({ movieType = "movie" }) {
       const genres = await getGenres(
         endpoints[movieType === "tv" ? "tvSeriesGenres" : "movieGenres"]
       );
-      console.log(genres);
       setVideoGenres(genres);
     })();
   }, [movieType]);
