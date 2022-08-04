@@ -37,7 +37,7 @@ export default function GenresPage({ movieType = "movie" }) {
               if (!videoGenres.some((category) => category.id === item.id))
                 return;
               return (
-                <Link to={`/${movieType}/${item.name}/${item.id}`}>
+                <Link to={`/${movieType}/${item.name}/${item.id}`} key={item.id}>
                   <div className="category__player">
                     <video
                       loop

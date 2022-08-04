@@ -22,7 +22,7 @@ export default function PopularMovies({ movies, buttonName }) {
       >
         {movies.map((item) => {
           return (
-            <SwiperSlide>
+            <SwiperSlide key={item.id}>
               <div
                 className="popular-movie__slide"
                 onClick={() => {

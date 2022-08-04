@@ -75,7 +75,7 @@ export default function MainPage() {
             if (!movieGenres.some((category) => category.id === item.id))
               return;
             return (
-              <SwiperSlide>
+              <SwiperSlide key={item.id}>
                 <GenreItem item={ item }/>
               </SwiperSlide>
             );

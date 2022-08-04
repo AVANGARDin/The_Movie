@@ -7,7 +7,7 @@ export default function PlayButton() {
       x="0px"
       y="0px"
       viewBox="0 0 64 64"
-      enable-background="new 0 0 64 64"
+      enableBackground="new 0 0 64 64"
     >
       <g id="Play">
         <path

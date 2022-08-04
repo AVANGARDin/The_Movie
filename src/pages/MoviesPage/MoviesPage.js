@@ -37,7 +37,7 @@ export default function MoviesPage({ movieType }) {
         {videos ? (
           videos.map((video) => {
             return (
-              <div className="movies-container__item">
+              <div className="movies-container__item" key={video.id}>
                 <img src={LOW_SIZE_IMG_URL + video.poster_path}></img>
               </div>
             );

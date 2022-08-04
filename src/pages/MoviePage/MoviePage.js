@@ -62,7 +62,7 @@ export default function MoviePage({ movieType }) {
               <ul>
                 {movieInfo.genres.map((genre) => {
                   return (
-                    <li>{genres.find((item) => item.id === genre.id).name}</li>
+                    <li key={genre.id}>{genres.find((item) => item.id === genre.id).name}</li>
                   );
                 })}
               </ul>
