@@ -40,6 +40,7 @@ cursor: pointer;
 
 .movies-container__item img{
   width: 100%;
-  object-fit: contain;
+  object-fit: fill;
   display: block;
+  aspect-ratio: 0.67;
 }
