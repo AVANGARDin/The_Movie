@@ -1,7 +1,18 @@
 import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import "./Header.css";
-import { Link, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
+
+const isActiveLink = ({ isActive }) => {
+  if (isActive) {
+    return (
+      {
+        color: "#E50914",
+        borderColor:"#E50914"
+      }
+    )
+  }
+}
 
 export default function Header() {
   const input = document.querySelector(
@@ -16,21 +27,24 @@ export default function Header() {
           </div>
         </Link>
         <div className="header__categories">
-          <Link to="movie/genres">
+          <NavLink to="movie/genres" style={isActiveLink}>
             <div className="header__categories_movies">Movies</div>
-          </Link>
-          <Link to="tv/genres">
+          </NavLink>
+          <NavLink to="tv/genres" style={isActiveLink}>
             <div className="header__categories_tv-series">TV Series</div>
-          </Link>
-          <Link to="/">
+          </NavLink>
+          <NavLink to="/" style={isActiveLink}>
             <div className="header__categories_tv-series">My List</div>
-          </Link>
+          </NavLink>
 
-          <div className="header__categories_search" onClick={() => {
-            input.focus();
-          }}>
+          <div
+            className="header__categories_search"
+            onClick={() => {
+              input.focus();
+            }}
+          >
             <input placeholder="Search..." type="search"></input>
-            <Link to="/" onClick={()=>input.value = ''}>
+            <Link to="/" onClick={() => (input.value = "")}>
               <SearchIcon />
             </Link>
           </div>
