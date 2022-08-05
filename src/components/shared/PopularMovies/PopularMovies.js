@@ -5,15 +5,18 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "./PopularMovies.css"
 import { LOW_SIZE_IMG_URL } from '../../../constants/endpoints';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { POPULAR_MOVIES, POPULAR_TV_SERIES } from '../../../constants/routes';
 
-
-export default function PopularMovies({ movies, buttonName }) {
+export default function PopularMovies({ movies, buttonName, link}) {
   const navigate = useNavigate();
+
 
   return (
     <div className="popular-movie">
-      <button className="name-category">{buttonName}</button>
+      <Link to={link}>
+        <button className="name-category">{buttonName}</button>
+      </Link>
       <Swiper
         modules={[Navigation]}
         navigation
@@ -28,8 +31,8 @@ export default function PopularMovies({ movies, buttonName }) {
                 onClick={() => {
                   navigate(
                     item.title
-                      ? `movie/${item.id}/${item.title.replace(/\s/g, "_")}`
-                      : `tv/${item.id}/${item.name.replace(/\s/g, "_")}`
+                      ? `${POPULAR_MOVIES}/${item.id}/${item.title.replace( /\s/g, "_" )}`
+                      : `${POPULAR_TV_SERIES}/${item.id}/${item.name.replace( /\s/g, "_" )}`
                   );
                 }}
               >

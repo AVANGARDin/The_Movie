@@ -5,13 +5,12 @@ import { genres } from '../../constants/genres';
 import "./MoviePage.css"
 import ReactPlayer from "react-player";
 import Rating from "@mui/material/Rating";
-import { useLocation, useParams } from 'react-router-dom';
-import NotFoundPage from '../NotFoundPage/NotFoundPage';
+import { useParams } from 'react-router-dom';
+import { Box } from '@mui/system';
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
 export default function MoviePage({ movieType }) {
-  const [isNoMovie, setIsNoMovie] = useState(false);
   const { id } = useParams() ;
   const [movieInfo, setMovieInfo] = useState();
   const [video, setVideo] = useState();
@@ -33,7 +32,6 @@ export default function MoviePage({ movieType }) {
               `https://www.youtube.com/watch?v=` + response.data.results[0].key
             );
       }).catch(() => {
-        setIsNoMovie(true)
       });
   }, [])
   
@@ -47,7 +45,6 @@ export default function MoviePage({ movieType }) {
         });
     }, []);
 
-  if (isNoMovie) return <NotFoundPage />;
 
     return movieInfo ? (
       <div className="video-player__container">
@@ -62,7 +59,9 @@ export default function MoviePage({ movieType }) {
               <ul>
                 {movieInfo.genres.map((genre) => {
                   return (
-                    <li key={genre.id}>{genres.find((item) => item.id === genre.id).name}</li>
+                    <li key={genre.id}>
+                      {genres.find((item) => item.id === genre.id).name}
+                    </li>
                   );
                 })}
               </ul>
@@ -83,7 +82,11 @@ export default function MoviePage({ movieType }) {
             </div>
           </div>
         </div>
-        <ReactPlayer width={"auto"} height={"500px"} controls url={video} />
+        {video ? (
+          <ReactPlayer width={"auto"} height={"500px"} controls url={video} />
+        ) : (
+          <Box padding={12} color={"white"}>The video will appear soon. Choose another.</Box>
+        )}
       </div>
     ) : (
       <div>Loading</div>

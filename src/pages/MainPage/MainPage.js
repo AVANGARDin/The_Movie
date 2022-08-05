@@ -11,6 +11,8 @@ import { getGenres } from "../../helpers/apiHelpers/getGenres";
 import PopularMovies from "../../components/shared/PopularMovies/PopularMovies";
 import PlayButton from './PlayButton';
 import GenreItem from '../../components/shared/GenreItem/GenreItem';
+import { Link } from 'react-router-dom';
+import { MOVIE_GENRES, POPULAR_MOVIES, POPULAR_TV_SERIES } from "../../constants/routes"
 
 export default function MainPage() {
   const [popularMovies, setPopularMovies] = useState([]);
@@ -76,15 +78,22 @@ export default function MainPage() {
               return;
             return (
               <SwiperSlide key={item.id}>
-                <GenreItem item={ item }/>
+                <Link to={`${MOVIE_GENRES}/${item.id}/${item.name}`}>
+                  <GenreItem item={item} />
+                </Link>
               </SwiperSlide>
             );
           })}
         </Swiper>
-        <PopularMovies movies={popularMovies} buttonName="Popular Movies" />
+        <PopularMovies
+          movies={popularMovies}
+          buttonName="Popular Movies"
+          link={POPULAR_MOVIES}
+        />
         <PopularMovies
           movies={popularTVSeries}
           buttonName="Popular TV Series"
+          link={POPULAR_TV_SERIES}
         />
         {myList.length ? (
           <PopularMovies movies={myList} buttonName="My List" />

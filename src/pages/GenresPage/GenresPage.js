@@ -4,61 +4,37 @@ import { genres } from '../../constants/genres';
 import { endpoints } from '../../constants/endpoints';
 import { getGenres } from '../../helpers/apiHelpers/getGenres';
 import { Link } from 'react-router-dom';
+import GenreItem from "../../components/shared/GenreItem/GenreItem";
+import { MOVIE_GENRES, TV_GENRES } from '../../constants/routes';
 
-  const mouseOverHandler = (e) => {
-    e.target.closest(".category__player").childNodes[0].play();
-  };
-
-  const mouseOutHandler = (e) => {
-    e.target.closest(".category__player").childNodes[0].pause();
-  };
-
-  const playerPauseHandler = (e) => {
-    e.target.currentTime = 0;
-  };
-
-export default function GenresPage({ movieType = "movie" }) {
+export default function GenresPage({ movieType }) {
   const [videoGenres, setVideoGenres] = useState();
+  const route = movieType === "movie" ? MOVIE_GENRES : TV_GENRES;
 
   useEffect(() => {
     (async () => {
-      const genres = await getGenres(
+      const genresFromApi = await getGenres(
         endpoints[movieType === "tv" ? "tvSeriesGenres" : "movieGenres"]
       );
-      setVideoGenres(genres);
+      const result = genres.filter((genre) => genresFromApi.some(item => item.id === genre.id));
+      setVideoGenres(result);
     })();
   }, [movieType]);
   
   return (
     <div className="genres-container">
-
-        {videoGenres
-          ? genres.map((item) => {
-              if (!videoGenres.some((category) => category.id === item.id))
-                return;
-              return (
-                <Link to={`/${movieType}/${item.name}/${item.id}`} key={item.id}>
-                  <div className="category__player">
-                    <video
-                      loop
-                      muted
-                      src={item.src}
-                      type="video/mp4"
-                      onPause={playerPauseHandler}
-                    ></video>
-                    <div
-                      className="category"
-                      onMouseOver={mouseOverHandler}
-                      onMouseOut={mouseOutHandler}
-                    >
-                      {item.name}
-                    </div>
-                  </div>
-                </Link>
-              );
-            })
-          : null}
-
-</div>
+      {videoGenres
+        ? videoGenres.map((item) => {
+            return (
+              <Link
+                to={`/${route}/${item.id}/${item.name.replace( /\s/g, "_" )}`}
+                key={item.id}
+              >
+                <GenreItem item={item} />
+              </Link>
+            );
+          })
+        : <div>Loading...</div>}
+    </div>
   );
 }

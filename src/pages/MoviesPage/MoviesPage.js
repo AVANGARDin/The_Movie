@@ -4,9 +4,11 @@ import { LOW_SIZE_IMG_URL } from "../../constants/endpoints";
 import { getGenreMovies } from '../../helpers/apiHelpers/getGenreMovies';
 import { deleteIncorrectData } from "../../helpers/deleteIncorrectData";
 import "./MoviesPage.css"
+import NotFoundPage from "../NotFoundPage/NotFoundPage"
+import { getPopular } from "../../helpers/apiHelpers/getPopular";
 
-export default function MoviesPage({ movieType }) {
-  const { id, genreName } = useParams();
+export default function MoviesPage({ movieType, title, endpoint }) {
+  const { genreId, genreName } = useParams();
   let [page, setPage] = useState(1);
   const [videos, setVideos] = useState([]);
 
@@ -19,9 +21,15 @@ export default function MoviesPage({ movieType }) {
 
   useEffect(() => {
     (async () => {
-      const videos = await getGenreMovies(movieType, id, page);
-      const result = deleteIncorrectData(videos.results);
-      setVideos((prev) => prev.concat(result));
+      if (genreName) {
+        const videos = await getGenreMovies(movieType, genreId, page);
+        const result = deleteIncorrectData(videos.results);
+        setVideos((prev) => prev.concat(result));
+      } else {
+        const videos = await getPopular(endpoint, page);
+        const result = deleteIncorrectData(videos);
+        setVideos((prev) => prev.concat(result));
+      }
     })();
   }, [page]);
 
@@ -32,7 +40,7 @@ export default function MoviesPage({ movieType }) {
 
   return (
     <div className="movies-container">
-      <div className="movies-container_title">{genreName.replace(/_/g," ")}</div>
+      <div className="movies-container_title">{genreName ? genreName.replace(/_/g," ") : title}</div>
       <div className="movies-container__videos">
         {videos ? (
           videos.map((video) => {
@@ -43,7 +51,7 @@ export default function MoviesPage({ movieType }) {
             );
           })
         ) : (
-          <div>Page not found</div>
+            <NotFoundPage />
         )}
       </div>
     </div>

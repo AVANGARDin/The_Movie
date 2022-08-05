@@ -1,10 +1,8 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
 import "./GenreItem.css"
 
 export default function GenreItem({ item }) {
   return (
-    <Link to={`movie/genres/${item.id}/${item.name}`}>
       <div className="category__player">
         <video
           loop
@@ -27,6 +25,5 @@ export default function GenreItem({ item }) {
           {item.name}
         </div>
       </div>
-    </Link>
   );
 }
