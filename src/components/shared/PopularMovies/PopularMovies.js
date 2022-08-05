@@ -5,23 +5,18 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "./PopularMovies.css"
 import { LOW_SIZE_IMG_URL } from '../../../constants/endpoints';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { POPULAR_MOVIES, POPULAR_TV_SERIES } from '../../../constants/routes';
 
-
-export default function PopularMovies({ movies, buttonName }) {
+export default function PopularMovies({ movies, buttonName, link}) {
   const navigate = useNavigate();
-  const handleClick = (e) => {
-    const movie = movies.find(item => item.id === +e.currentTarget.dataset.id);
-    console.log("click", "click", movie);
-    navigate(`movie/${e.currentTarget.dataset.name}`,
-      { state: { id: e.currentTarget.dataset.id, moviType: e.currentTarget.dataset.type } });
-  };
-
 
 
   return (
     <div className="popular-movie">
-      <button className="name-category">{buttonName}</button>
+      <Link to={link}>
+        <button className="name-category">{buttonName}</button>
+      </Link>
       <Swiper
         modules={[Navigation]}
         navigation
@@ -30,13 +25,16 @@ export default function PopularMovies({ movies, buttonName }) {
       >
         {movies.map((item) => {
           return (
-            <SwiperSlide>
+            <SwiperSlide key={item.id}>
               <div
-                data-id={item.id}
-                data-type={item.title ? "movie" : "tv"}
-                data-name={item.title ? item.title.replace(/\s/g, "") : item.name.replace(" ","")}
                 className="popular-movie__slide"
-                onClick={handleClick}
+                onClick={() => {
+                  navigate(
+                    item.title
+                      ? `${POPULAR_MOVIES}/${item.id}/${item.title.replace( /\s/g, "_" )}`
+                      : `${POPULAR_TV_SERIES}/${item.id}/${item.name.replace( /\s/g, "_" )}`
+                  );
+                }}
               >
                 <img src={LOW_SIZE_IMG_URL + item.poster_path}></img>
               </div>

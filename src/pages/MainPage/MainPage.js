@@ -10,6 +10,9 @@ import { getPopular } from '../../helpers/apiHelpers/getPopular';
 import { getGenres } from "../../helpers/apiHelpers/getGenres";
 import PopularMovies from "../../components/shared/PopularMovies/PopularMovies";
 import PlayButton from './PlayButton';
+import GenreItem from '../../components/shared/GenreItem/GenreItem';
+import { Link } from 'react-router-dom';
+import { MOVIE_GENRES, POPULAR_MOVIES, POPULAR_TV_SERIES } from "../../constants/routes"
 
 export default function MainPage() {
   const [popularMovies, setPopularMovies] = useState([]);
@@ -33,23 +36,6 @@ export default function MainPage() {
       setMovieGenres(genres);
     })();
   }, []);
-
-  const mouseOverHandler = (e) => {
-    e.target
-      .closest(".category__player")
-      .childNodes[0].play();
-  }
-
-  const mouseOutHandler = (e) => {
-    e.target
-      .closest(".category__player")
-      .childNodes[0].pause();
-  };
-
-  const playerPauseHandler = (e) => {
-    e.target.currentTime = 0;
-  };
-
 
   let random = Math.floor(Math.random() * popularMovies.length);
 
@@ -91,31 +77,23 @@ export default function MainPage() {
             if (!movieGenres.some((category) => category.id === item.id))
               return;
             return (
-              <SwiperSlide>
-                <div className="category__player">
-                  <video
-                    loop
-                    muted
-                    src={item.src}
-                    type="video/mp4"
-                    onPause={playerPauseHandler}
-                  ></video>
-                  <div
-                    className="category"
-                    onMouseOver={mouseOverHandler}
-                    onMouseOut={mouseOutHandler}
-                  >
-                    {item.name}
-                  </div>
-                </div>
+              <SwiperSlide key={item.id}>
+                <Link to={`${MOVIE_GENRES}/${item.id}/${item.name}`}>
+                  <GenreItem item={item} />
+                </Link>
               </SwiperSlide>
             );
           })}
         </Swiper>
-        <PopularMovies movies={popularMovies} buttonName="Popular Movies" />
+        <PopularMovies
+          movies={popularMovies}
+          buttonName="Popular Movies"
+          link={POPULAR_MOVIES}
+        />
         <PopularMovies
           movies={popularTVSeries}
           buttonName="Popular TV Series"
+          link={POPULAR_TV_SERIES}
         />
         {myList.length ? (
           <PopularMovies movies={myList} buttonName="My List" />

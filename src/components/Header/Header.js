@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useRef } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import "./Header.css";
 import { Link, NavLink, Outlet } from "react-router-dom";
-
+import { MOVIE_GENRES, TV_GENRES } from "../../constants/routes";
 const isActiveLink = ({ isActive }) => {
   if (isActive) {
     return (
@@ -15,9 +15,7 @@ const isActiveLink = ({ isActive }) => {
 }
 
 export default function Header() {
-  const input = document.querySelector(
-    ".header__categories_search input"
-  );
+  const inputRef = useRef();
   return (
     <>
       <header>
@@ -27,10 +25,10 @@ export default function Header() {
           </div>
         </Link>
         <div className="header__categories">
-          <NavLink to="movie/genres" style={isActiveLink}>
+          <NavLink to={MOVIE_GENRES} style={isActiveLink}>
             <div className="header__categories_movies">Movies</div>
           </NavLink>
-          <NavLink to="tv/genres" style={isActiveLink}>
+          <NavLink to={TV_GENRES} style={isActiveLink}>
             <div className="header__categories_tv-series">TV Series</div>
           </NavLink>
           <NavLink to="/" style={isActiveLink}>
@@ -40,11 +38,11 @@ export default function Header() {
           <div
             className="header__categories_search"
             onClick={() => {
-              input.focus();
+              inputRef.current.focus();
             }}
           >
-            <input placeholder="Search..." type="search"></input>
-            <Link to="/" onClick={() => (input.value = "")}>
+            <input placeholder="Search..." type="search" ref={inputRef}></input>
+            <Link to="/" onClick={() => (inputRef.current.value = "")}>
               <SearchIcon />
             </Link>
           </div>
