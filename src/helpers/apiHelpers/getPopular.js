@@ -1,9 +1,9 @@
 import axios from "axios";
 import { deleteIncorrectData } from "../deleteIncorrectData";
 
-export function getPopular(endpoint) {
+export function getPopular(endpoint, page = 1) {
   const results = axios
-    .get(endpoint)
+    .get(endpoint+`&page=${page}`)
     .then(function (response) {
       // handle success
       return deleteIncorrectData(response.data.results)

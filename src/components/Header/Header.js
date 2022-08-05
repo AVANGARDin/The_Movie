@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useRef } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import "./Header.css";
 import { Link, Outlet } from "react-router-dom";
+import { MOVIE_GENRES, TV_GENRES } from "../../constants/routes";
 
 export default function Header() {
-  const input = document.querySelector(
-    ".header__categories_search input"
-  );
+  const inputRef = useRef();
   return (
     <>
       <header>
@@ -16,21 +15,24 @@ export default function Header() {
           </div>
         </Link>
         <div className="header__categories">
-          <Link to="movie/genres">
+          <Link to={MOVIE_GENRES}>
             <div className="header__categories_movies">Movies</div>
           </Link>
-          <Link to="tv/genres">
+          <Link to={TV_GENRES}>
             <div className="header__categories_tv-series">TV Series</div>
           </Link>
           <Link to="/">
             <div className="header__categories_tv-series">My List</div>
           </Link>
 
-          <div className="header__categories_search" onClick={() => {
-            input.focus();
-          }}>
-            <input placeholder="Search..." type="search"></input>
-            <Link to="/" onClick={()=>input.value = ''}>
+          <div
+            className="header__categories_search"
+            onClick={() => {
+              inputRef.current.focus();
+            }}
+          >
+            <input placeholder="Search..." type="search" ref={inputRef}></input>
+            <Link to="/" onClick={() => (inputRef.current.value = "")}>
               <SearchIcon />
             </Link>
           </div>
