@@ -1,8 +1,18 @@
 import React, { useRef } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import "./Header.css";
-import { Link, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { MOVIE_GENRES, TV_GENRES } from "../../constants/routes";
+const isActiveLink = ({ isActive }) => {
+  if (isActive) {
+    return (
+      {
+        color: "#E50914",
+        borderColor:"#E50914"
+      }
+    )
+  }
+}
 
 export default function Header() {
   const inputRef = useRef();
@@ -15,15 +25,15 @@ export default function Header() {
           </div>
         </Link>
         <div className="header__categories">
-          <Link to={MOVIE_GENRES}>
+          <NavLink to={MOVIE_GENRES} style={isActiveLink}>
             <div className="header__categories_movies">Movies</div>
-          </Link>
-          <Link to={TV_GENRES}>
+          </NavLink>
+          <NavLink to={TV_GENRES} style={isActiveLink}>
             <div className="header__categories_tv-series">TV Series</div>
-          </Link>
-          <Link to="/">
+          </NavLink>
+          <NavLink to="/" style={isActiveLink}>
             <div className="header__categories_tv-series">My List</div>
-          </Link>
+          </NavLink>
 
           <div
             className="header__categories_search"
