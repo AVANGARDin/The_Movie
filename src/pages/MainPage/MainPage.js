@@ -32,8 +32,11 @@ export default function MainPage() {
       setPopularTVSeries(series);
     })();
     (async () => {
-      const genres = await getGenres(endpoints.movieGenres);
-      setMovieGenres(genres);
+      const genresFromApi = await getGenres(endpoints.movieGenres);
+      const result = genres.filter((genre) =>
+        genresFromApi.some((item) => item.id === genre.id)
+      );
+      setMovieGenres(result);
     })();
   }, []);
 
@@ -73,9 +76,7 @@ export default function MainPage() {
           slidesPerView={4}
           spaceBetween={70}
         >
-          {genres.map((item) => {
-            if (!movieGenres.some((category) => category.id === item.id))
-              return;
+          {movieGenres.map((item) => {
             return (
               <SwiperSlide key={item.id}>
                 <Link to={`${MOVIE_GENRES}/${item.id}/${item.name}`}>

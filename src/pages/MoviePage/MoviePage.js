@@ -85,7 +85,9 @@ export default function MoviePage({ movieType }) {
         {video ? (
           <ReactPlayer width={"auto"} height={"500px"} controls url={video} />
         ) : (
-          <Box padding={12} color={"white"}>The video will appear soon. Choose another.</Box>
+          <Box padding={12} color={"white"}>
+            The video will appear soon. Choose another.
+          </Box>
         )}
       </div>
     ) : (

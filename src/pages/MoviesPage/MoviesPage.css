@@ -16,6 +16,13 @@
   text-align: center;
   background-color: rgba(0, 0, 0, 0.9);
   z-index: 1000;
+  display: flex;
+  white-space: nowrap;
+}
+
+.movies-container_title .sort{
+  margin-left: 100px;
+  color: white;
 }
 
 .movies-container__videos{
@@ -31,6 +38,7 @@
   overflow: hidden;
   border-radius: 10px;
   position: relative;
+  background-color: rgba(128, 128, 128, 0.5);
 }
 
 .movies-container__item:hover {
@@ -43,4 +51,27 @@ cursor: pointer;
   object-fit: fill;
   display: block;
   aspect-ratio: 0.67;
+}
+
+.movies-container__item .title{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sort{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sort select {
+  height: 25px;
+  font-family: inherit;
+  font-weight: 700;
+}
+
+.sort select option {
+  font-family: inherit;
+  font-weight: 700;
 }
