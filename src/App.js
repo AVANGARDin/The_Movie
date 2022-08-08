@@ -12,6 +12,7 @@ import {
   POPULAR_TV_SERIES,
 } from "./constants/routes";
 import { endpoints } from "./constants/endpoints";
+import LoginPage from "./pages/LoginPage/LoginPage";
 
 
 function App() {
@@ -56,6 +57,7 @@ function App() {
           path={`${POPULAR_TV_SERIES}/:id/:name`}
           element={<MoviePage movieType="tv" />}
         />
+        <Route path="login" element={<LoginPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
