@@ -2,11 +2,21 @@ import React, { useState } from "react";
 import { Box, Button, TextField } from "@mui/material";
 import "./LoginPage.css";
 import styled from "@emotion/styled";
+import { getObjectFromLocalStorage, setLocalStorageItem } from "./utils";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux"
+import { setIsLogged, setUserName } from "../../redux/isLoggedReduser";
 
+
+localStorage.setItem(
+  "n@gmail.com",
+  JSON.stringify({ name: "Roman", password: "12345", myList: [] })
+);
 
 const InputStyled = styled(TextField)({
   width: "100%",
   marginBottom: "16px",
+  borderRadius: "5px",
   background: "#333",
   "& .MuiInputLabel-root.Mui-focused": {
     color: "#8c8c8c",
@@ -23,67 +33,65 @@ const InputStyled = styled(TextField)({
   },
 });
 
-
-
+const ButtonStyled = styled(Button)({
+  background: "red",
+  marginTop: "20px",
+  "&:hover": {
+    background: "rgba(255, 0, 0, 0.8)",
+  },
+});
 
 export default function LoginPage() {
-
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [firstName, setFirstName] = useState();
-  const [lastName, setLastName] = useState();
-  const [phoneNumber, setPhoneNumber] = useState();
+  const [email, setEmail] = useState("n@gmail.com");
+  const [password, setPassword] = useState("12345");
+  const [errorEmail, setErrorEmail] = useState(false);
+  const [errorPassword, setErrorPassword] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onEmailChange = (event) => {
-    // setEmail(event.target.value);
-    const input = document.querySelector(".MuiInput-root.Mui-focused");
-    const styles = window.getComputedStyle(input, "::after");
-
-  }
+    setErrorEmail(false);
+    setEmail(event.target.value);
+  };
 
   const onPasswordChange = (event) => {
-    // setPassword(event.target.value);
+    setErrorPassword(false);
+    setPassword(event.target.value);
+  };
+  
+  const onSubmitHandler = (event) => {
+    const login = getObjectFromLocalStorage(email);
+    if (!login) {
+      setErrorEmail(true);
+    } else if (login.password !== password) {
+      setErrorPassword(true);
+    } else {
+      dispatch(setIsLogged(true));
+      dispatch(setUserName(login.name));
+      navigate("/");
+    }
   };
 
-  const onFirstNameChange = (event) => {
-    // setFirstName(event.target.value);
-  };
-
-  const onLastNameChange = (event) => {
-    // setLastName(event.target.value);
-  };
-
-  const onPhoneNumberChange = (event) => {
-    // setPhoneNumber(event.target.value);
-  };
-
-  const onSubmit = async () => {
-
-    // const data = await createUser({
-    //   email,
-    //   password,
-    //   firstName,
-    //   lastName,
-    //   phoneNumber,
-    // });
-    // if (data && !data.error) {
-    //   setLoginSession(data);
-    //   setIsLoggedIn(true);
-    // }
-  };
   return (
     <div className="form-container">
       <form className="signup-form" noValidate autoComplete="off">
         <h2>Sign In</h2>
+        {errorEmail ? (
+          <div className="error">
+            Sorry, we can't find an account with this email address. Please try
+            again or <a href="https://www.google.com/">create a new account</a>.
+          </div>
+        ) : null}
         <Box position="relative">
           <InputStyled
             key="email"
             variant="filled"
             onChange={onEmailChange}
             label="Email"
+            value="n@gmail.com"
           />
-          <div className="incorect">Pasword must include</div>
         </Box>
+        {errorPassword ? <div className="error">Incorrect password</div> : null}
         <Box position="relative">
           <InputStyled
             key="password"
@@ -91,12 +99,12 @@ export default function LoginPage() {
             onChange={onPasswordChange}
             label="Password"
             type="password"
+            value="12345"
           />
-          <div className="incorect">Pasword must include</div>
         </Box>
-        <Button onClick={onSubmit} variant="contained" color="primary">
+        <ButtonStyled variant="contained" onClick={onSubmitHandler}>
           Sign In
-        </Button>
+        </ButtonStyled>
       </form>
       <img
         className="background__img"
