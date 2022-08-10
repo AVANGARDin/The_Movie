@@ -1,5 +1,6 @@
 export const ORIGINAL_IMG_URL = "https://image.tmdb.org/t/p/original";
 export const LOW_SIZE_IMG_URL = "https://image.tmdb.org/t/p/w500";
+export const VIDEO_BASE_URL = "https://www.youtube.com/watch?v=";
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 

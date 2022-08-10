@@ -4,7 +4,7 @@ export function deleteIncorrectData (data) {
     const keys = Object.keys(item);
     let checkData = false;
     keys.forEach((key) => {
-      if (item[key] === "" || item[key] === null) {
+      if (item[key] === "" || item[key] === null || item[key].length === 0) {
         checkData = true;
       }
     });

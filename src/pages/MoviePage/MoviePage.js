@@ -1,14 +1,14 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { LOW_SIZE_IMG_URL } from "../../constants/endpoints";
+import { LOW_SIZE_IMG_URL, VIDEO_BASE_URL } from "../../constants/endpoints";
 import { genres } from '../../constants/genres';
 import "./MoviePage.css"
 import ReactPlayer from "react-player";
 import Rating from "@mui/material/Rating";
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/system';
-
-const API_KEY = process.env.REACT_APP_API_KEY;
+import { getMovie } from '../../helpers/apiHelpers/getMovie';
+import { getMovieVideos } from '../../helpers/apiHelpers/getMovieVideos';
 
 export default function MoviePage({ movieType }) {
   const { id } = useParams() ;
@@ -16,33 +16,24 @@ export default function MoviePage({ movieType }) {
   const [video, setVideo] = useState();
 
   useEffect(() => {
-    axios
-      .get(
-        `https://api.themoviedb.org/3/${movieType}/${id}/videos?api_key=${API_KEY}`
-      )
-      .then((response) => {
-        if (response.data.results.length < 1) return;
+    (async () => {
+      const data = await getMovieVideos(movieType, id);
+        if (data.results.length < 1) return;
 
-        const oficial_trailer = response.data.results.find(
+        const oficial_trailer = data.results.find(
           (item) => item.name === "Official Trailer"
         );
         oficial_trailer
-          ? setVideo(`https://www.youtube.com/watch?v=` + oficial_trailer.key)
-          : setVideo(
-              `https://www.youtube.com/watch?v=` + response.data.results[0].key
-            );
-      }).catch(() => {
-      });
+          ? setVideo(VIDEO_BASE_URL + oficial_trailer.key)
+          : setVideo(VIDEO_BASE_URL + data.results[0].key);
+    })()
   }, [])
   
-    useEffect(() => {
-      axios
-        .get(
-          `https://api.themoviedb.org/3/${movieType}/${id}?api_key=${API_KEY}`
-        )
-        .then((response) => {
-          setMovieInfo(response.data);
-        });
+  useEffect(() => {
+    (async () => {
+      const result = await getMovie(movieType, id);
+      setMovieInfo(result);
+    })()
     }, []);
 
 

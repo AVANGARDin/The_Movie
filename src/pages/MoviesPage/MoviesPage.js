@@ -21,7 +21,6 @@ export default function MoviesPage({ movieType, title, endpoint }) {
 
   const loadMoreHandler = () => {
     setPage(prev=>++prev);
-    console.log("cliiiik", page);
   };
 
   useEffect(() => {
@@ -32,6 +31,7 @@ export default function MoviesPage({ movieType, title, endpoint }) {
         setVideos((prev) => prev.concat(result));
       } else {
         const videos = await getPopular(endpoint, page);
+        console.log(videos);
         const result = deleteIncorrectData(videos);
         setVideos((prev) => prev.concat(result));
       }
