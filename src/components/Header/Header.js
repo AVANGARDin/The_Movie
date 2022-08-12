@@ -6,6 +6,7 @@ import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { MOVIE_GENRES, TV_GENRES } from "../../constants/routes";
 import { Button, styled } from "@mui/material";
 import { setIsLogged, setUserName } from "../../redux/isLoggedReduser";
+import { clearAll } from "../../redux/myListReduser";
 
 const isActiveLink = ({ isActive }) => {
   if (isActive) {
@@ -50,7 +51,7 @@ export default function Header() {
           <NavLink to={TV_GENRES} style={isActiveLink}>
             <div className="header__categories_tv-series">TV Series</div>
           </NavLink>
-          <NavLink to="/" style={isActiveLink}>
+          <NavLink to="myList" style={isActiveLink}>
             <div className="header__categories_tv-series">My List</div>
           </NavLink>
 
@@ -75,6 +76,7 @@ export default function Header() {
             <ButtonStyled onClick={() => {
               dispatch(setIsLogged(false));
               dispatch(setUserName(""));
+              dispatch(clearAll([]));
           }}>Sign out</ButtonStyled>
         )}
       </header>

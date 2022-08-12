@@ -5,8 +5,24 @@ import { genres } from '../../constants/genres';
 import "./MoviePage.css"
 import ReactPlayer from "react-player";
 import Rating from "@mui/material/Rating";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/system';
+import { addVideo, removeVideo } from '../../redux/myListReduser';
+import { useDispatch, useSelector } from 'react-redux';
+import { getObjectFromLocalStorage } from '../LoginPage/utils';
+import { Alert } from '@mui/material';
+import styled from '@emotion/styled';
+
+const StyledAlert = styled(Alert)({
+  width: "250px",
+  height: "32px",
+  lineHeight:"0",
+  alignItems: "center",
+  marginLeft: "10px",
+  borderRadius: "10px",
+})
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -14,6 +30,12 @@ export default function MoviePage({ movieType }) {
   const { id } = useParams() ;
   const [movieInfo, setMovieInfo] = useState();
   const [video, setVideo] = useState();
+  const dispatch = useDispatch();
+  const isLogged = useSelector(state=>state.isLogged.isLogged);
+  const userLogin = useSelector(state=>state.isLogged.userLogin);
+  const [addAlert, setAddAlert] = useState(false);
+  const [removeAlert, setRemoveAlert] = useState(false);
+  const [inMyList, setInMyList] = useState(false);
 
   useEffect(() => {
     axios
@@ -80,6 +102,41 @@ export default function MoviePage({ movieType }) {
                 max={10}
               />
             </div>
+            {isLogged && (!inMyList ?
+            <div className='add-list'>
+              <Box className="add-list_button" onClick={()=>{
+              const myList = getObjectFromLocalStorage(userLogin).myList;
+              myList.push(movieInfo);
+              localStorage.setItem(userLogin, JSON.stringify({
+                                  "name": "Roman",
+                                  "password": "12345",
+                                  "myList": myList
+                              }))
+              dispatch(addVideo(movieInfo));
+              setInMyList(true);
+              setTimeout(()=>setAddAlert(false),2000);
+              }
+            }>
+            <AddCircleOutlineIcon /> My List
+            </Box>
+              {addAlert && <StyledAlert severity="success" width="200px">Movie successfully added</StyledAlert>}
+            </div>
+            :
+            <div className='add-list'>
+              <Box className="add-list_button" onClick={()=>{
+              dispatch(removeVideo(movieInfo));
+              setRemoveAlert(true);
+              setInMyList(false);
+
+              setTimeout(()=>setRemoveAlert(false),2000);
+              }
+            }>
+            <RemoveCircleOutlineIcon /> My List
+            </Box>
+              {removeAlert && <StyledAlert severity="success" width="200px">Movie successfully removed</StyledAlert>}
+            </div>
+            )
+            }
           </div>
         </div>
         {video ? (
