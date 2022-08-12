@@ -33,6 +33,7 @@ export default function MoviePage({ movieType }) {
   const dispatch = useDispatch();
   const isLogged = useSelector(state=>state.isLogged.isLogged);
   const userLogin = useSelector(state=>state.isLogged.userLogin);
+  const myList = useSelector(state=>state.myList.myList);
   const [addAlert, setAddAlert] = useState(false);
   const [removeAlert, setRemoveAlert] = useState(false);
   const [inMyList, setInMyList] = useState(false);
@@ -64,9 +65,15 @@ export default function MoviePage({ movieType }) {
         )
         .then((response) => {
           setMovieInfo(response.data);
+          setInMyList(myList.some(item=> item.id === response.data.id));
         });
     }, []);
 
+    useEffect(() => {
+      if(movieInfo){
+        setInMyList(myList.some(item => item.id === movieInfo.id));
+      }
+    }, [myList]);
 
     return movieInfo ? (
       <div className="video-player__container">
@@ -102,8 +109,8 @@ export default function MoviePage({ movieType }) {
                 max={10}
               />
             </div>
-            {isLogged && (!inMyList ?
-            <div className='add-list'>
+            <div className='add-remove__block'>
+            {isLogged && !inMyList &&<div className='add-list'>
               <Box className="add-list_button" onClick={()=>{
               const myList = getObjectFromLocalStorage(userLogin).myList;
               myList.push(movieInfo);
@@ -113,30 +120,31 @@ export default function MoviePage({ movieType }) {
                                   "myList": myList
                               }))
               dispatch(addVideo(movieInfo));
-              setInMyList(true);
-              setTimeout(()=>setAddAlert(false),2000);
+              setRemoveAlert(prev=>prev =false);
+              setAddAlert(prev => prev = true);
+              setTimeout(()=>setAddAlert(prev => prev = false),2000)
               }
             }>
             <AddCircleOutlineIcon /> My List
             </Box>
-              {addAlert && <StyledAlert severity="success" width="200px">Movie successfully added</StyledAlert>}
             </div>
-            :
-            <div className='add-list'>
+            }
+            {isLogged && inMyList && <div className='add-list'>
               <Box className="add-list_button" onClick={()=>{
               dispatch(removeVideo(movieInfo));
-              setRemoveAlert(true);
-              setInMyList(false);
-
-              setTimeout(()=>setRemoveAlert(false),2000);
+              setInMyList(prev => prev = false);
+              setAddAlert(prev=> prev = false);
+              setRemoveAlert(prev => prev = true);
+              setTimeout(()=>setRemoveAlert(prev => prev = false),2000)
               }
             }>
             <RemoveCircleOutlineIcon /> My List
             </Box>
-              {removeAlert && <StyledAlert severity="success" width="200px">Movie successfully removed</StyledAlert>}
             </div>
-            )
             }
+            {addAlert ? <StyledAlert severity="success" width="200px">Movie successfully added</StyledAlert> : null}
+            {removeAlert ? <StyledAlert severity="success" width="200px">Movie successfully removed</StyledAlert> : null}
+            </div>
           </div>
         </div>
         {video ? (

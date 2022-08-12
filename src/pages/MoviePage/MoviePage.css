@@ -63,3 +63,7 @@
 .add-list {
   display: flex;
 }
+
+.add-remove__block{
+  display: flex;
+}
