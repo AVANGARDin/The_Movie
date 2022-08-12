@@ -4,7 +4,6 @@ import { LOW_SIZE_IMG_URL } from "../../constants/endpoints";
 import { getGenreMovies } from '../../helpers/apiHelpers/getGenreMovies';
 import { deleteIncorrectData } from "../../helpers/deleteIncorrectData";
 import "./MoviesPage.css"
-import NotFoundPage from "../NotFoundPage/NotFoundPage"
 import { getPopular } from "../../helpers/apiHelpers/getPopular";
 import { Button, Rating } from "@mui/material";
 import { newestSort, ratingSort } from "./utils";
@@ -31,6 +30,7 @@ export default function MoviesPage({ movieType, title, endpoint }) {
         setVideos((prev) => prev.concat(result));
       } else {
         const videos = await getPopular(endpoint, page);
+        console.log(videos);
         const result = deleteIncorrectData(videos);
         setVideos((prev) => prev.concat(result));
       }
@@ -81,7 +81,7 @@ export default function MoviesPage({ movieType, title, endpoint }) {
         {!genreName ? <GenresSort onChange={setGenre} /> : null}
       </div>
       <div className="movies-container__videos">
-        {sortedVideos ? (
+        {sortedVideos.length ? (
           sortedVideos.map((video) => {
             return (
               <div className="movies-container__item" key={video.id}>
@@ -106,10 +106,10 @@ export default function MoviesPage({ movieType, title, endpoint }) {
             );
           })
         ) : (
-          <NotFoundPage />
+          <div>Loading movies ...</div>
         )}
       </div>
-      <Button
+      {sortedVideos.length ? <Button
         onClick={loadMoreHandler}
         sx={{
           display: "flex",
@@ -118,7 +118,7 @@ export default function MoviesPage({ movieType, title, endpoint }) {
         }}
       >
         Load more
-      </Button>
+      </Button> : null}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { LOW_SIZE_IMG_URL } from "../../constants/endpoints";
+import { LOW_SIZE_IMG_URL, VIDEO_BASE_URL } from "../../constants/endpoints";
 import { genres } from '../../constants/genres';
 import "./MoviePage.css"
 import ReactPlayer from "react-player";
@@ -9,6 +9,8 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/system';
+import { getMovie } from '../../helpers/apiHelpers/getMovie';
+import { getMovieVideos } from '../../helpers/apiHelpers/getMovieVideos';
 import { addVideo, removeVideo } from '../../redux/myListReduser';
 import { useDispatch, useSelector } from 'react-redux';
 import { getObjectFromLocalStorage } from '../LoginPage/utils';
@@ -26,6 +28,7 @@ const StyledAlert = styled(Alert)({
 
 const API_KEY = process.env.REACT_APP_API_KEY;
 
+
 export default function MoviePage({ movieType }) {
   const { id } = useParams() ;
   const [movieInfo, setMovieInfo] = useState();
@@ -39,26 +42,25 @@ export default function MoviePage({ movieType }) {
   const [inMyList, setInMyList] = useState(false);
 
   useEffect(() => {
-    axios
-      .get(
-        `https://api.themoviedb.org/3/${movieType}/${id}/videos?api_key=${API_KEY}`
-      )
-      .then((response) => {
-        if (response.data.results.length < 1) return;
+    (async () => {
+      const data = await getMovieVideos(movieType, id);
+        if (data.results.length < 1) return;
 
-        const oficial_trailer = response.data.results.find(
+        const oficial_trailer = data.results.find(
           (item) => item.name === "Official Trailer"
         );
         oficial_trailer
-          ? setVideo(`https://www.youtube.com/watch?v=` + oficial_trailer.key)
-          : setVideo(
-              `https://www.youtube.com/watch?v=` + response.data.results[0].key
-            );
-      }).catch(() => {
-      });
+          ? setVideo(VIDEO_BASE_URL + oficial_trailer.key)
+          : setVideo(VIDEO_BASE_URL + data.results[0].key);
+    })()
   }, [])
   
-    useEffect(() => {
+
+  useEffect(() => {
+    (async () => {
+      const result = await getMovie(movieType, id);
+      setMovieInfo(result);
+    })()
       axios
         .get(
           `https://api.themoviedb.org/3/${movieType}/${id}?api_key=${API_KEY}`
@@ -67,6 +69,7 @@ export default function MoviePage({ movieType }) {
           setMovieInfo(response.data);
           setInMyList(myList.some(item=> item.id === response.data.id));
         });
+
     }, []);
 
     useEffect(() => {
