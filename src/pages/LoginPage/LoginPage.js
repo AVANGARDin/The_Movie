@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Box, Button, TextField } from "@mui/material";
 import "./LoginPage.css";
 import styled from "@emotion/styled";
-import { getObjectFromLocalStorage, setLocalStorageItem } from "./utils";
+import { getObjectFromLocalStorage } from "./utils";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux"
-import { setIsLogged, setUserName } from "../../redux/isLoggedReduser";
+import { setIsLogged, setUserLogin, setUserName } from "../../redux/isLoggedReduser";
 
 
 localStorage.setItem(
@@ -68,7 +68,8 @@ export default function LoginPage() {
     } else {
       dispatch(setIsLogged(true));
       dispatch(setUserName(login.name));
-      navigate("/");
+      dispatch(setUserLogin(email));
+      navigate(-1);
     }
   };
 

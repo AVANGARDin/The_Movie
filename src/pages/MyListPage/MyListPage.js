@@ -1,71 +1,43 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from 'react-router-dom';
 import { LOW_SIZE_IMG_URL } from "../../constants/endpoints";
-import { getGenreMovies } from '../../helpers/apiHelpers/getGenreMovies';
-import { deleteIncorrectData } from "../../helpers/deleteIncorrectData";
-import "./MoviesPage.css"
 import NotFoundPage from "../NotFoundPage/NotFoundPage"
-import { getPopular } from "../../helpers/apiHelpers/getPopular";
-import { Button, Rating } from "@mui/material";
-import { newestSort, ratingSort } from "./utils";
-import GenresSort from "../../components/GenresSort/GenresSort";
-import { genresSort } from "../../components/GenresSort/utils";
+import { Rating } from "@mui/material";
+import { newestSort, ratingSort } from "../MoviesPage/utils";
+import { useSelector } from "react-redux";
 
-export default function MoviesPage({ movieType, title, endpoint }) {
-  const { genreId, genreName } = useParams();
-  let [page, setPage] = useState(1);
+export default function MyListPage() {
   let [sort, setSort] = useState("Popularity");
-  let [genre, setGenre] = useState("0");
+  let myList = useSelector(state=>state.myList.myList);
   const [videos, setVideos] = useState([]);
   const [sortedVideos, setSortedVideos] = useState([]);
-
-  const loadMoreHandler = () => {
-    setPage(prev=>++prev);
-  };
+  const isLogged = useSelector(state=>state.isLogged.isLogged)
 
   useEffect(() => {
-    (async () => {
-      if (genreName) {
-        const videosFromApi = await getGenreMovies(movieType, genreId, page);
-        const result = deleteIncorrectData(videosFromApi.results);
-        setVideos((prev) => prev.concat(result));
-      } else {
-        const videos = await getPopular(endpoint, page);
-        const result = deleteIncorrectData(videos);
-        setVideos((prev) => prev.concat(result));
-      }
-    })();
-  }, [page]);
+      setVideos(myList);
+  }, [myList]);
 
   useEffect(() => {
     if (sort === "Newest") {
-      if (genre === "0") {
         setSortedVideos(newestSort(videos));
-      } else {
-        const genreVideos = genresSort(videos, genre);
-        setSortedVideos(newestSort(genreVideos));
-      }
     } else if (sort === "Rating") {
-      if (genre === "0") {
         setSortedVideos(ratingSort(videos));
-      } else {
-        const genreVideos = genresSort(videos, genre);
-        setSortedVideos(ratingSort(genreVideos));
-      }
     } else {
-      if (genre === "0") {
         setSortedVideos(videos);
-      } else {
-        const genreVideos = genresSort(videos, genre);
-        setSortedVideos(genreVideos);
-      }
     }
-  }, [videos, sort, genre]);
+  }, [videos, sort]);
+
+  if(!videos.length && isLogged === false){
+    return <div className="movies-container">You must login first.</div>
+  }
+
+  if(!videos.length && isLogged === true){
+    return <div className="movies-container">Add movie to your list.</div>
+  }
 
   return (
     <div className="movies-container">
       <div className="movies-container_title">
-        <div>{genreName ? genreName.replace(/_/g, " ") : title}</div>
+        <div>My List</div>
         <div className="sort">
           <div>Sort:</div>
           <select
@@ -78,7 +50,6 @@ export default function MoviesPage({ movieType, title, endpoint }) {
             <option value="Newest">Newest</option>
           </select>
         </div>
-        {!genreName ? <GenresSort onChange={setGenre} /> : null}
       </div>
       <div className="movies-container__videos">
         {sortedVideos ? (
@@ -109,16 +80,6 @@ export default function MoviesPage({ movieType, title, endpoint }) {
           <NotFoundPage />
         )}
       </div>
-      <Button
-        onClick={loadMoreHandler}
-        sx={{
-          display: "flex",
-          color: "red",
-          margin: "30px auto 0",
-        }}
-      >
-        Load more
-      </Button>
     </div>
   );
 }
