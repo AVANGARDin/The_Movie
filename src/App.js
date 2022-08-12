@@ -13,6 +13,7 @@ import {
 } from "./constants/routes";
 import { endpoints } from "./constants/endpoints";
 import LoginPage from "./pages/LoginPage/LoginPage";
+import MyListPage from "./pages/MyListPage/MyListPage";
 
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
           element={<MoviePage movieType="tv" />}
         />
         <Route path="login" element={<LoginPage />} />
+        <Route path="myList" element = {<MyListPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

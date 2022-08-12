@@ -13,12 +13,13 @@ import PlayButton from './PlayButton';
 import GenreItem from '../../components/shared/GenreItem/GenreItem';
 import { Link } from 'react-router-dom';
 import { MOVIE_GENRES, POPULAR_MOVIES, POPULAR_TV_SERIES } from "../../constants/routes"
+import { useSelector } from 'react-redux';
 
 export default function MainPage() {
   const [popularMovies, setPopularMovies] = useState([]);
   const [isPopularMovies, setIsPopularMovies] = useState(false);
   const [popularTVSeries, setPopularTVSeries] = useState([]);
-  const [myList, setMyList] = useState([]);
+  const [myList, setMyList] = useState(useSelector(state=>state.myList.myList));
   const [movieGenres, setMovieGenres] = useState([]);
 
   useEffect(() => {
@@ -97,7 +98,7 @@ export default function MainPage() {
           link={POPULAR_TV_SERIES}
         />
         {myList.length ? (
-          <PopularMovies movies={myList} buttonName="My List" />
+          <PopularMovies movies={myList} buttonName="My List" link="myList" />
         ) : null}
       </div>
     </main>
