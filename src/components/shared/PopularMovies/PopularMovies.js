@@ -30,9 +30,17 @@ export default function PopularMovies({ movies, buttonName, link}) {
                 className="popular-movie__slide"
                 onClick={() => {
                   navigate(
-                    item.title
-                      ? `${POPULAR_MOVIES}/${item.id}/${item.title.replace( /\s/g, "_" )}`
-                      : `${POPULAR_TV_SERIES}/${item.id}/${item.name.replace( /\s/g, "_" )}`
+                    link === "myList"
+                      ? `myList/movie/${item.id}`
+                      : item.title
+                      ? `${POPULAR_MOVIES}/${item.id}/${item.title.replace(
+                          /\s/g,
+                          "_"
+                        )}`
+                      : `${POPULAR_TV_SERIES}/${item.id}/${item.name.replace(
+                          /\s/g,
+                          "_"
+                        )}`
                   );
                 }}
               >

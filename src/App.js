@@ -28,9 +28,17 @@ function App() {
           element={<MoviesPage movieType="movie" />}
         />
         <Route
+          path={`${MOVIE_GENRES}/:genreId/:genreName/:id/:name`}
+          element={<MoviePage movieType="movie" />}
+        />
+        <Route
           path={`${TV_GENRES}/:genreId/:genreName`}
           element={<MoviesPage movieType="tv" />}
-        />{" "}
+        />
+        <Route
+          path={`${TV_GENRES}/:genreId/:genreName/:id/:name`}
+          element={<MoviePage movieType="tv" />}
+        />
         <Route
           path={`${POPULAR_MOVIES}`}
           element={
@@ -47,7 +55,8 @@ function App() {
             <MoviesPage
               movieType="tv/popular"
               title="Popular TV series"
-              endpoint={endpoints.popularTVSeries} />
+              endpoint={endpoints.popularTVSeries}
+            />
           }
         />
         <Route
@@ -59,7 +68,8 @@ function App() {
           element={<MoviePage movieType="tv" />}
         />
         <Route path="login" element={<LoginPage />} />
-        <Route path="myList" element = {<MyListPage />} />
+        <Route path="myList" element={<MyListPage />} />
+        <Route path="myList/movie/:id" element={<MoviePage movieType="movie" />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

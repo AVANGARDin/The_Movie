@@ -9,7 +9,6 @@ import { store } from "../../redux/store";
 import MoviePage from "./MoviePage";
 
 
-
 test("should render movie page", async () => {
   const { container } = render(
     <Provider store={store}>

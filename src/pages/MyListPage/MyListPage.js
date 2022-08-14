@@ -4,6 +4,7 @@ import NotFoundPage from "../NotFoundPage/NotFoundPage"
 import { Rating } from "@mui/material";
 import { newestSort, ratingSort } from "../MoviesPage/utils";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 export default function MyListPage() {
   let [sort, setSort] = useState("Popularity");
@@ -55,25 +56,27 @@ export default function MyListPage() {
         {sortedVideos ? (
           sortedVideos.map((video) => {
             return (
-              <div className="movies-container__item" key={video.id}>
-                <img src={LOW_SIZE_IMG_URL + video.poster_path}></img>
-                <div className="title">{video.title || video.name}</div>
-                <div className="release_date">
-                  {video.first_air_date
-                    ? video.first_air_date
-                    : video.release_date}
+              <Link to={`/myList/movie/${video.id}`}>
+                <div className="movies-container__item" key={video.id}>
+                  <img src={LOW_SIZE_IMG_URL + video.poster_path}></img>
+                  <div className="title">{video.title || video.name}</div>
+                  <div className="release_date">
+                    {video.first_air_date
+                      ? video.first_air_date
+                      : video.release_date}
+                  </div>
+                  <Rating
+                    size="12px"
+                    readOnly
+                    precision={0.1}
+                    defaultValue={video.vote_average}
+                    max={10}
+                    sx={{
+                      fontSize: "20px",
+                    }}
+                  />
                 </div>
-                <Rating
-                  size="12px"
-                  readOnly
-                  precision={0.1}
-                  defaultValue={video.vote_average}
-                  max={10}
-                  sx={{
-                    fontSize: "20px",
-                  }}
-                />
-              </div>
+              </Link>
             );
           })
         ) : (

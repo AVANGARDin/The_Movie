@@ -19,7 +19,7 @@ export default function MainPage() {
   const [popularMovies, setPopularMovies] = useState([]);
   const [isPopularMovies, setIsPopularMovies] = useState(false);
   const [popularTVSeries, setPopularTVSeries] = useState([]);
-  const [myList, setMyList] = useState(useSelector(state=>state.myList.myList));
+  const myList = useSelector(state=>state.myList.myList);
   const [movieGenres, setMovieGenres] = useState([]);
 
   useEffect(() => {
@@ -48,7 +48,8 @@ export default function MainPage() {
       <div className="image__container">
         {isPopularMovies ? (
           <img
-            src={ORIGINAL_IMG_URL + popularMovies[random].backdrop_path}
+            src = {ORIGINAL_IMG_URL + popularMovies[random].backdrop_path}
+            alt="background img"
           ></img>
         ) : (
           <div>Loading img</div>
@@ -68,7 +69,16 @@ export default function MainPage() {
             </div>
           </div>
           <div className="play-button">
-            <PlayButton />
+            <Link
+              className="play-button-link"
+              to={
+                popularMovies.length
+                  ? `${POPULAR_MOVIES}/${popularMovies[random].id}/${popularMovies[random].title.replace(/\s/g,"_")}`
+                  : "/"
+              }
+            >
+              <PlayButton />
+            </Link>
           </div>
         </div>
         <Swiper
