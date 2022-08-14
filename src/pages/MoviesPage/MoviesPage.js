@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { LOW_SIZE_IMG_URL } from "../../constants/endpoints";
 import { getGenreMovies } from '../../helpers/apiHelpers/getGenreMovies';
 import { deleteIncorrectData } from "../../helpers/deleteIncorrectData";
@@ -35,7 +35,7 @@ export default function MoviesPage({ movieType, title, endpoint }) {
         setVideos((prev) => prev.concat(result));
       }
     })();
-  }, [page]);
+  }, [page, movieType, genreName, genreId, endpoint]);
 
   useEffect(() => {
     if (sort === "Newest") {
@@ -84,41 +84,47 @@ export default function MoviesPage({ movieType, title, endpoint }) {
         {sortedVideos.length ? (
           sortedVideos.map((video) => {
             return (
-              <div className="movies-container__item" key={video.id}>
-                <img src={LOW_SIZE_IMG_URL + video.poster_path}></img>
-                <div className="title">{video.title || video.name}</div>
-                <div className="release_date">
-                  {video.first_air_date
-                    ? video.first_air_date
-                    : video.release_date}
+              <Link to={`${video.id}/${video.title || video.name}`}>
+                <div className="movies-container__item" key={video.id}>
+                  <img src={LOW_SIZE_IMG_URL + video.poster_path} alt="video poster"></img>
+                  <div className="title">{video.title || video.name}</div>
+                  <div className="release_date">
+                    {video.first_air_date
+                      ? video.first_air_date
+                      : video.release_date}
+                  </div>
+                  <Rating
+                    size="12px"
+                    readOnly
+                    precision={0.1}
+                    defaultValue={video.vote_average}
+                    max={10}
+                    sx={{
+                      fontSize: "20px",
+                    }}
+                  />
                 </div>
-                <Rating
-                  size="12px"
-                  readOnly
-                  precision={0.1}
-                  defaultValue={video.vote_average}
-                  max={10}
-                  sx={{
-                    fontSize: "20px",
-                  }}
-                />
-              </div>
+              </Link>
             );
           })
         ) : (
-          <div>Loading movies ...</div>
+          <div>
+            Loading movies ...
+          </div>
         )}
       </div>
-      {sortedVideos.length ? <Button
-        onClick={loadMoreHandler}
-        sx={{
-          display: "flex",
-          color: "red",
-          margin: "30px auto 0",
-        }}
-      >
-        Load more
-      </Button> : null}
+      {sortedVideos.length ? (
+        <Button
+          onClick={loadMoreHandler}
+          sx={{
+            display: "flex",
+            color: "red",
+            margin: "30px auto 0",
+          }}
+        >
+          Load more
+        </Button>
+      ) : null}
     </div>
   );
 }

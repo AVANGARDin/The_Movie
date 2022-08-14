@@ -67,3 +67,7 @@
 .add-remove__block{
   display: flex;
 }
+
+a {
+  color: white;
+}
