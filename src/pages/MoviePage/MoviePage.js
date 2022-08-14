@@ -30,7 +30,7 @@ const API_KEY = process.env.REACT_APP_API_KEY;
 
 
 export default function MoviePage({ movieType }) {
-  const { id } = useParams() ;
+  const { id } = useParams();
   const [movieInfo, setMovieInfo] = useState();
   const [video, setVideo] = useState();
   const dispatch = useDispatch();
@@ -159,6 +159,6 @@ export default function MoviePage({ movieType }) {
         )}
       </div>
     ) : (
-      <div>Loading</div>
+      <div>Loading...</div>
     );
 }
